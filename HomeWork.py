@@ -1,71 +1,69 @@
-# EX_1
-class Kalkulator:
+class Tomato:
+    states = {1: "green", 2: "yellow", 3: "red"}
 
-    def __init__(self, a, b):
-        self.a = a
-        self.b = b
+    def __init__(self, index):
+        self.index = index
+        self._state = 1
 
-    def div(self):
-        try:
-            return self.a // self.b
-        except ZeroDivisionError:
-            print("Делить на ноль нельзя")
+    def grow(self):
+        self._state += 1
 
-    def minus(self):
-        return self.a - self.b
-
-    def plus(self):
-        return self.a + self.b
-
-    def mult(self):
-        return self.a * self.b
-
-    def k(self):
-        return self.a ** self.b
+    def is_ripe(self):
+        if self._state == 3:
+            return True
+        else:
+            return False
 
 
-while True:
-    user_input = input("Введите операцию которую хотите выполнить(+,-,/,*,**) \n Введите /n для выхода: ")
-    example = Kalkulator(int(input("Введите первое число: ")), int(input("Введите второе число: ")))
-    if user_input == "+":
-        print(example.plus())
-    elif user_input == "-":
-        print(example.minus())
-    elif user_input == "*":
-        print(example.mult())
-    elif user_input == "/":
-        print(example.div())
-    elif user_input == "n":
-        break
-    elif user_input == "**":
-        print(example.k())
+class TomatoBush:
+    def __init__(self, num_tomato):
+        self.tomatoes = []
+        for i in range(num_tomato):
+            self.tomatoes.append(Tomato(i))
+
+    def grow_all(self):
+        for i in self.tomatoes:
+            i.grow()
+
+    def all_are_ripe(self):
+        false_count = 0
+        for i in self.tomatoes:
+            if not i.is_ripe():
+                false_count += 1
+        if false_count == 0:
+            return True
+        else:
+            return False
+
+    def give_away_all(self):
+        self.tomatoes.clear()
+
+class Gardener:
+    def __init__(self, name, plant):
+        self._name = name
+        self._plant = plant
+
+    def work(self):
+        self._plant.grow_all()
+        print(f"{self._name} выполнил свою работу")
+
+    def harvest(self):
+        if self._plant.all_are_ripe():
+            self._plant.give_away_all()
+            print("Все помидоры созрели, урожай собран")
+        else:
+            print("Надо подождать, не все помидоры созрели")
+
+    @staticmethod
+    def knowledge_base():
+        print("Спарвка по садоводству")
 
 
-# EX_2
-class MyClass:
-    def __init__(self):
-        pass
-
-    def first_method(self, input):
-        if isinstance(input, str):
-            vowels = sum(1 for c in input if c in 'aeiouAEIOU')
-            consonants = len(input) - vowels
-            if vowels * consonants <= len(input):
-                return (c for c in input if c in 'aeiouAEIOU')
-            else:
-                return (c for c in input if c not in 'aeiouAEIOU')
-        elif isinstance(input, int):
-            return sum(int(d) for d in str(input) if int(d) % 2 == 0) * len(str(input))
-
-    def second_method(self, input):
-        if isinstance(input, (str, int)):
-            return len(str(input))
-
-
-
-# Usage example
-my_class = MyClass()
-print(my_class.first_method(input("Введите строку :")))  # "eoo"
-print(my_class.first_method(int(input("Введите число: "))))  # 42
-print(my_class.second_method(input("Введите строку чтобы проверить длинну: ")))  # 11
-print(my_class.second_method(int(input("Введите число чтобы проверить длинну: "))))  # 6
+Gardener.knowledge_base()
+bush = TomatoBush(1)
+gardner = Gardener("Olga", bush)
+gardner.harvest()
+gardner.work()
+gardner.harvest()
+gardner.work()
+gardner.harvest()
